@@ -16,28 +16,28 @@ exit(EXIT_FAILURE);
 }
 else if (child_pid == 0)
 {
-// Tokenize the user input into command and arguments
+/*Tokenize the user input into command and arguments*/
 char *token;
-char *args[1024];  // Assuming a maximum of 1024 arguments
+char *args[1024];
 int argc = 0;
 
-token = strtok((char *)command, " ");  // Tokenize by space
+token = strtok((char *)command, " ");
 while (token != NULL)
 {
 args[argc] = token;
 token = strtok(NULL, " ");
 argc++;
 }
-args[argc] = NULL;  // Null-terminate the argument array
+args[argc] = NULL;
 
-// Construct the full path to the command
+/*Construct the full path to the command*/
 char command_path[256];
 snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
 
-// Call execve to execute the user-specified command
+
 if (execve(command_path, args, NULL) == -1)
 {
-perror("execve");  // Print an error message if execve fails
+perror("execve");
 exit(EXIT_FAILURE);
 }
 }
