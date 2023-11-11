@@ -4,5 +4,5 @@
 */
 void print_prompt(void)
 {
-printf("$");
+write(1,"$",1);
 }

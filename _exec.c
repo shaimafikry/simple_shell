@@ -16,15 +16,30 @@ exit(EXIT_FAILURE);
 }
 else if (child_pid == 0)
 {
-/*Child process*/
-char comm_path[256];
-snprintf(comm_path, sizeof(comm_path), "/bin/%s", command);
+// Tokenize the user input into command and arguments
+char *token;
+char *args[1024];  // Assuming a maximum of 1024 arguments
+int argc = 0;
 
-char *args[] = {comm_path, NULL};
-execve(comm_path, args, NULL);
+token = strtok((char *)command, " ");  // Tokenize by space
+while (token != NULL)
+{
+args[argc] = token;
+token = strtok(NULL, " ");
+argc++;
+}
+args[argc] = NULL;  // Null-terminate the argument array
 
-perror("execve");
+// Construct the full path to the command
+char command_path[256];
+snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
+
+// Call execve to execute the user-specified command
+if (execve(command_path, args, NULL) == -1)
+{
+perror("execve");  // Print an error message if execve fails
 exit(EXIT_FAILURE);
+}
 }
 else
 {
