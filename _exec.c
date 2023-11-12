@@ -7,43 +7,43 @@
 */
 void _exec(const char *command)
 {
-pid_t child_pid = fork();
+	struct stat st;
+	char command_path[256], *token, *args[1024];
+	int argc = 0;
+	/*Tokenize the user input into command and arguments*/
+	token = strtok((char *)command, " ");
+	while (token != NULL)
+	{
+		args[argc] = token;
+		token = strtok(NULL, " ");
+		argc++;
+	}
+	args[argc] = NULL;
+	/*Construct the full path to the command*/
+	snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
+	if (stat(command_path, &st) == 0) /*check for path first before fork*/
+	{
+		pid_t child_pid = fork();
 
-if (child_pid == -1)
-{
-perror("fork");
-exit(EXIT_FAILURE);
-}
-else if (child_pid == 0)
-{
-/*Tokenize the user input into command and arguments*/
-char *token;
-char *args[1024];
-int argc = 0;
-
-token = strtok((char *)command, " ");
-while (token != NULL)
-{
-args[argc] = token;
-token = strtok(NULL, " ");
-argc++;
-}
-args[argc] = NULL;
-
-/*Construct the full path to the command*/
-char command_path[256];
-snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
-
-
-if (execve(command_path, args, NULL) == -1)
-{
-perror("execve");
-exit(EXIT_FAILURE);
-}
-}
-else
-{
-/*Parent process*/
-wait(NULL);
-}
+		if (child_pid == -1)
+		{
+		perror("fork");
+		exit(EXIT_FAILURE);
+		}
+		else if (child_pid == 0)
+		{
+		if (execve(command_path, args, NULL) == -1)
+		{
+		perror("execve");
+		exit(EXIT_FAILURE);
+		}
+		}
+		else
+			wait(NULL);
+	}
+	else
+	{
+		perror("stat");
+		exit(EXIT_FAILURE);
+	}
 }
