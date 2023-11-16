@@ -8,16 +8,16 @@ void user_input(char *command, size_t size)
 {
 if (fgets(command, size, stdin) == NULL)
 {
-if (feof(stdin))
-{
-write(1, "\n", 1);
-exit(EXIT_SUCCESS);
-}
-else
-{
-perror("fgets");
-exit(EXIT_FAILURE);
-}
+	if (feof(stdin))
+	{
+		write(1,"\n",1);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		perror("fgets");
+		exit(EXIT_FAILURE);
+	}
 }
 command[strcspn(command, "\n")] = '\0';
 }

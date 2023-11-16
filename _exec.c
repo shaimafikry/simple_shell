@@ -19,23 +19,23 @@ void _exec(const char *command)
 		argc++;
 	}
 	args[argc] = NULL;
-	/*Construct the full path to the command*/
-	snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
-	if (stat(command_path, &st) == 0) /*check for path first before fork*/
+	if (strncmp(args[0], "/bin/",5) == 0)
+		strcpy(command_path,args[0]);
+	else
+		snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
+	if (stat(command_path,&st) == 0)
 	{
 		pid_t child_pid = fork();
 
 		if (child_pid == -1)
 		{
-		perror("fork");
-		exit(EXIT_FAILURE);
+		perror("fork"), exit(EXIT_FAILURE);
 		}
 		else if (child_pid == 0)
 		{
 		if (execve(command_path, args, NULL) == -1)
 		{
-		perror("execve");
-		exit(EXIT_FAILURE);
+		perror("execve"), exit(EXIT_FAILURE);
 		}
 		}
 		else
@@ -43,7 +43,6 @@ void _exec(const char *command)
 	}
 	else
 	{
-		perror("stat");
-		exit(EXIT_FAILURE);
+		perror("stat"), exit(EXIT_FAILURE);
 	}
 }
