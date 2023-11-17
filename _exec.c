@@ -7,9 +7,14 @@
 */
 void _exec(const char *command)
 {
-	struct stat st;
-	char command_path[256], *token, *args[1024];
+	char *command_path;
+	char *token, *args[1024];
 	int argc = 0;
+	command_path = malloc(1024);
+	if (command_path == NULL)
+	{
+		write(1,"malloc failed", sizeof("malloc failed"));
+	}
 	/*Tokenize the user input into command and arguments*/
 	token = strtok((char *)command, " ");
 	while (token != NULL)
@@ -19,11 +24,9 @@ void _exec(const char *command)
 		argc++;
 	}
 	args[argc] = NULL;
-	if (strncmp(args[0], "/bin/", 5) == 0)
-		strcpy(command_path, args[0]);
-	else
-		snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
-	if (stat(command_path, &st) == 0)
+	printf("%s\n", args[0]);
+	find_path(args[0], command_path);
+	if (command_path != NULL)
 	{
 		pid_t child_pid = fork();
 
@@ -45,4 +48,5 @@ void _exec(const char *command)
 	{
 		perror("stat"), exit(EXIT_FAILURE);
 	}
+	free(command_path);
 }
