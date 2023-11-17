@@ -19,11 +19,11 @@ void _exec(const char *command)
 		argc++;
 	}
 	args[argc] = NULL;
-	if (strncmp(args[0], "/bin/",5) == 0)
-		strcpy(command_path,args[0]);
+	if (strncmp(args[0], "/bin/", 5) == 0)
+		strcpy(command_path, args[0]);
 	else
 		snprintf(command_path, sizeof(command_path), "/bin/%s", args[0]);
-	if (stat(command_path,&st) == 0)
+	if (stat(command_path, &st) == 0)
 	{
 		pid_t child_pid = fork();
 

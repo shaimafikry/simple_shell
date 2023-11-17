@@ -10,7 +10,7 @@ if (fgets(command, size, stdin) == NULL)
 {
 	if (feof(stdin))
 	{
-		write(1,"\n",1);
+		write(1, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 	else
