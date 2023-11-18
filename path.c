@@ -46,5 +46,4 @@ start:
 		free(copied_full_path);
 		return; }}
 command_path[0] = '\0', free(copied_full_path);
-exit(2);
-}
+exit(2); }
