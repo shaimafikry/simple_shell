@@ -5,7 +5,7 @@
  * @comm_path[]:the string that will save the full path of the command
  * @args[]:the secound argument of exeve function
 */
-void _exec(const char *command)
+void _exec(const char *command, char *filename)
 {
 	char *command_path, *token, *args[1024];
 	int argc = 0;
@@ -30,13 +30,15 @@ void _exec(const char *command)
 
 		if (child_pid == -1)
 		{
+			write(1, filename, strlen(filename));
 			perror("fork");
 			exit(EXIT_FAILURE); }
 		else if (child_pid == 0)
 		{
 			args[0] = command_path;
-			if (execve(command_path, args, NULL) == -1)
+			if (execve(command_path, args, environ) == -1)
 			{
+				write(1, filename, strlen(filename));
 				perror("execve");
 				exit(EXIT_FAILURE); }
 		}
@@ -44,6 +46,6 @@ void _exec(const char *command)
 			wait(NULL); }
 		else
 		{
-			perror("Command not found");
+			perror(filename);
 			exit(EXIT_FAILURE); }
 	free(command_path); }
