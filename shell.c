@@ -15,19 +15,9 @@ int i = 0;
 
 while (1)
 {
-start:
 	if (isatty(STDIN_FILENO))
 		print_prompt();
 	user_input(command, sizeof(command));
-	if (strcmp(command, "env") == 0)
-	{
-		for (i = 0; environ[i]; i++)
-		{
-			write(1, environ[i], strlen(environ[i]));
-			putchar('\n');
-		}
-	goto start;
-	}
 	while (command[i] != '\0')
 	{
 		if ((command[i] == ' ' || (command[i] == '\t' || command[i] == '\n')))
