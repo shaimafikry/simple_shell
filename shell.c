@@ -9,13 +9,27 @@
 int main(__attribute__((unused)) int argc, char *argv[])
 {
 char *filename = argv[0];
-char command[125];
+char command[1024];
+char *args[1024];
+int i = 0;
+
 while (1)
 {
-if (isatty(STDIN_FILENO))
-	print_prompt();
-user_input(command, sizeof(command));
-_exec(command, filename);
+	if (isatty(STDIN_FILENO))
+		print_prompt();
+
+	user_input(command, sizeof(command));
+	while (command[i] != '\0')
+	{
+		if ((command[i] == ' ' || (command[i] == '\t' || command[i] == '\n')))
+			i++;
+		else
+		{
+			input_token(command, args);
+			_exec(args[0], filename, args);
+			break;
+		}
+	}
 }
-return (0);
+	return (0);
 }

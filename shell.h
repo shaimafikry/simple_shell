@@ -11,6 +11,7 @@
 extern char **environ;
 void user_input(char *command, size_t size);
 void print_prompt(void);
-void _exec(const char *command, char *filename);
+void _exec(char *command, char *filename, char *args[1024]);
 void find_path(char *name, char *command_path);
+void input_token(const char *command, char *args[1024]);
 #endif

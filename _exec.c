@@ -3,26 +3,19 @@
  * _exec-execute the command
  * @command:the command that will be inputed
  * @filename: file name
+ * @args: tokenizaed input
 */
-void _exec(const char *command, char *filename)
+void _exec(char *command, char *filename, char *args[1024])
 {
-	char *command_path, *token, *args[1024];
-	int argc = 0;
+	char *command_path;
 
 	command_path = malloc(1024);
 	if (command_path == NULL)
 	{
 		write(1, "malloc failed", strlen("malloc failed"));
-		exit(EXIT_FAILURE); }
-	token = strtok((char *)command, " ");
-	while (token != NULL && argc < 1023)
-	{
-		args[argc] = token;
-		token = strtok(NULL, " ");
-		argc++;
+		exit(EXIT_FAILURE);
 	}
-	args[argc] = NULL;
-	find_path(args[0], command_path);
+	find_path(command, command_path);
 	if (command_path[0] != '\0')
 	{
 		pid_t child_pid = fork();
@@ -39,5 +32,5 @@ void _exec(const char *command, char *filename)
 	else
 		perror(filename), exit(EXIT_FAILURE);
 
-	free(command_path), free(token);
+	free(command_path);
 }
