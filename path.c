@@ -7,14 +7,14 @@
 */
 void find_path(char *name, char *command_path)
 {
-char *full_path, *copied_full_path, *path_arry[1024], *token;
 int i;
 struct stat st;
+char *full_path, *copied_full_path, *path_arry[1024], *token;
+
 copied_full_path = malloc(1024);
 if (copied_full_path == NULL)
 {
-	perror("malloc failed");
-	exit(EXIT_FAILURE); }
+	perror("malloc failed"), exit(EXIT_FAILURE); }
 for (i = 0; environ[i]; i++)
 {
 	if (strncmp(environ[i], "PATH=", 5) == 0)
@@ -22,28 +22,28 @@ for (i = 0; environ[i]; i++)
 		full_path = environ[i] + 5;
 		break; }}
 if (full_path[0] == '=')
-{
-	strcpy(copied_full_path, full_path + 1); }
+	strcpy(copied_full_path, full_path + 1);
 else
-{
-	strcpy(copied_full_path, full_path); }
+	strcpy(copied_full_path, full_path);
 token = strtok(copied_full_path, ":");
 i = 0;
 while (token != NULL)
 {
-	path_arry[i] = token;
-	token = strtok(NULL, ":");
+	path_arry[i] = token, token = strtok(NULL, ":");
 	i++; }
 path_arry[i] = NULL;
+if (strchr(name, '/') != NULL)
+{
+	strcpy(command_path, name);
+	goto start; }
 for (i = 0; path_arry[i]; i++)
 {
 	strcpy(command_path, path_arry[i]);
-	strcat(command_path, "/");
-	strcat(command_path, name);
+	strcat(command_path, "/"), strcat(command_path, name);
+start:
 	if (stat(command_path, &st) == 0)
 	{
 		free(copied_full_path);
 		return; }}
-command_path[0] = '\0';
-free(copied_full_path);
+command_path[0] = '\0', free(copied_full_path);
 }

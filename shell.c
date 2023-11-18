@@ -2,7 +2,8 @@
 
 /**
  *main - the shell loop main function
- *@command[]: the command that the user will input
+ * @argc: num
+ * @argv: input includeng file name
  * Return: 0 on success, 1 on error, or error code
  */
 int main(__attribute__((unused)) int argc, char *argv[])

@@ -2,8 +2,7 @@
 /**
  * _exec-execute the command
  * @command:the command that will be inputed
- * @comm_path[]:the string that will save the full path of the command
- * @args[]:the secound argument of exeve function
+ * @filename: file name
 */
 void _exec(const char *command, char *filename)
 {
@@ -30,22 +29,17 @@ void _exec(const char *command, char *filename)
 
 		if (child_pid == -1)
 		{
-			write(1, filename, strlen(filename));
-			perror("fork");
+			perror(filename);
 			exit(EXIT_FAILURE); }
 		else if (child_pid == 0)
 		{
-			args[0] = command_path;
 			if (execve(command_path, args, environ) == -1)
 			{
-				write(1, filename, strlen(filename));
-				perror("execve");
-				exit(EXIT_FAILURE); }
+				perror(filename), exit(EXIT_FAILURE); }
 		}
 		else
 			wait(NULL); }
 		else
 		{
-			perror(filename);
-			exit(EXIT_FAILURE); }
+			perror(filename), exit(EXIT_FAILURE); }
 	free(command_path); }
