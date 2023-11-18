@@ -28,18 +28,16 @@ void _exec(const char *command, char *filename)
 		pid_t child_pid = fork();
 
 		if (child_pid == -1)
-		{
-			perror(filename);
-			exit(EXIT_FAILURE); }
+			free(command_path), perror(filename), exit(EXIT_FAILURE);
+
 		else if (child_pid == 0)
 		{
 			if (execve(command_path, args, environ) == -1)
-			{
-				perror(filename), exit(EXIT_FAILURE); }
-		}
+				free(command_path), perror(filename), exit(EXIT_FAILURE); }
 		else
 			wait(NULL); }
-		else
-		{
-			perror(filename), exit(EXIT_FAILURE); }
-	free(command_path); }
+	else
+		perror(filename), exit(EXIT_FAILURE);
+
+	free(command_path), free(token);
+}

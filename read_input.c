@@ -10,13 +10,19 @@ if (fgets(command, size, stdin) == NULL)
 {
 if (feof(stdin))
 {
+free(command);
 exit(EXIT_SUCCESS);
 }
 else
 {
+free(command);
 perror("fgets");
 exit(EXIT_FAILURE);
 }
 }
 command[strcspn(command, "\n")] = '\0';
+if (strcmp(command, "exit") == 0)
+{
+	exit(EXIT_SUCCESS);
+}
 }
