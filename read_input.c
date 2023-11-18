@@ -16,7 +16,7 @@ void user_input(char *command, size_t size)
 		{
 			free(command);
 			perror("fgets");
-			exit(EXIT_FAILURE);
+			exit(2);
 		}
 	}
 	if (strcmp(command, "\n") != 0)

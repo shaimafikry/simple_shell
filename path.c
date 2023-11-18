@@ -14,7 +14,7 @@ char *full_path, *copied_full_path, *path_arry[1024], *token;
 copied_full_path = malloc(1024);
 if (copied_full_path == NULL)
 {
-	perror("malloc failed"), exit(EXIT_FAILURE); }
+	perror("malloc failed"), exit(2); }
 for (i = 0; environ[i]; i++)
 {
 	if (strncmp(environ[i], "PATH=", 5) == 0)
@@ -46,5 +46,5 @@ start:
 		free(copied_full_path);
 		return; }}
 command_path[0] = '\0', free(copied_full_path);
-exit(EXIT_FAILURE);
+exit(2);
 }

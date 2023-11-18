@@ -13,7 +13,7 @@ void _exec(char *command, char *filename, char *args[1024])
 	if (command_path == NULL)
 	{
 		write(1, "malloc failed", strlen("malloc failed"));
-		exit(EXIT_FAILURE);
+		exit(2);
 	}
 	find_path(command, command_path);
 	if (command_path[0] != '\0')
@@ -21,16 +21,16 @@ void _exec(char *command, char *filename, char *args[1024])
 		pid_t child_pid = fork();
 
 		if (child_pid == -1)
-			free(command_path), perror(filename), exit(EXIT_FAILURE);
+			free(command_path), perror(filename), exit(2);
 
 		else if (child_pid == 0)
 		{
 			if (execve(command_path, args, environ) == -1)
-				free(command_path), perror(filename), exit(EXIT_FAILURE); }
+				free(command_path), perror(filename), exit(2); }
 		else
 			wait(NULL); }
 	else
-		perror(filename), exit(EXIT_FAILURE);
+		perror(filename), exit(2);
 
 	free(command_path);
 }
