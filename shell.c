@@ -12,7 +12,8 @@ char *filename = argv[0];
 char command[125];
 while (1)
 {
-print_prompt();
+if (isatty(STDIN_FILENO))
+	print_prompt();
 user_input(command, sizeof(command));
 _exec(command, filename);
 }
