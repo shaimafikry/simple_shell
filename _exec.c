@@ -9,6 +9,7 @@ void _exec(char *command, char *filename, char *args[1024])
 {
 	char *command_path;
 	int status;
+
 	command_path = malloc(1024);
 	if (command_path == NULL)
 	{
